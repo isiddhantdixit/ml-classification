@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -38,7 +38,7 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
-    test_size=0.4,
+    test_size=0.6,
     random_state=0,
     stratify=y
 )
@@ -49,9 +49,9 @@ pca = PCA(n_components=15)
 X_train = pca.fit_transform(X_train)
 X_test = pca.transform(X_test)
 
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.neural_network import MLPClassifier
 
-classifier = QuadraticDiscriminantAnalysis()
+classifier = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500, random_state=42)
 classifier.fit(X_train, y_train)
 y_pred = classifier.predict(X_test)
 

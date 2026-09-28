@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -38,20 +38,20 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
-    test_size=0.4,
+    test_size=0.6,
     random_state=0,
     stratify=y
 )
 
 from sklearn.decomposition import PCA
 
-pca = PCA(n_components=15)
+pca = PCA(n_components=5)
 X_train = pca.fit_transform(X_train)
 X_test = pca.transform(X_test)
 
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.linear_model import LogisticRegression
 
-classifier = QuadraticDiscriminantAnalysis()
+classifier = LogisticRegression(random_state=0)
 classifier.fit(X_train, y_train)
 y_pred = classifier.predict(X_test)
 
