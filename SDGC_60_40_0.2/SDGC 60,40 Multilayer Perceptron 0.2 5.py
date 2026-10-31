@@ -1,8 +1,10 @@
-﻿from pathlib import Path
+from pathlib import Path
 import numpy as np
 import pandas as pd
 
 BASE_DIR = Path(r"C:\Users\siddh\Desktop\Python Project\MachineLearningCVE")
+if not BASE_DIR.exists():
+    BASE_DIR = Path(__file__).resolve().parent / "MachineLearningCVE"
 
 file1 = BASE_DIR / "Tuesday-WorkingHours.pcap_ISCX.csv"
 file2 = BASE_DIR / "Wednesday-workingHours.pcap_ISCX.csv"
