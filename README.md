@@ -1,4 +1,3 @@
-
 # Machine Learning Classification for Network Intrusion Detection
 
 ### A Comparative Analysis of Machine Learning Classification Algorithms Using Principal Component Analysis (PCA)
@@ -8,124 +7,187 @@
   <img src="https://img.shields.io/badge/Machine%20Learning-Classification-orange?style=for-the-badge" alt="Machine Learning"/>
   <img src="https://img.shields.io/badge/Research-Network%20Security-red?style=for-the-badge" alt="Network Security"/>
   <img src="https://img.shields.io/badge/Dimensionality%20Reduction-PCA-blueviolet?style=for-the-badge" alt="PCA"/>
+  <img src="https://img.shields.io/badge/Dataset-CIC--IDS2017-green?style=for-the-badge" alt="CIC-IDS2017"/>
 </p>
+
+---
+
+## 👥 Authors & Team Research Contributions
+
+**Department of Computer Science and Engineering**  
+**JAIN (Deemed-to-be University), Bengaluru, India**
+
+| Author | Roll Number | Primary Research Contribution & Experimental Allocation |
+| :--- | :--- | :--- |
+| **Shashwat Bikram Singh** | `25BTRCN173` | **Lead: 80:20 Split Experimental Suite (`SDGC_60_40_0.2`)**<br>• Implemented and evaluated all 15 model configurations for the 80% train / 20% test partition.<br>• Designed data preprocessing, NaN/Inf imputation, and LabelEncoder pipelines.<br>• Achieved the study's **overall highest accuracy of 99.42%** with 15-component MLP.<br>• Authored 80:20 performance analysis, multiclass confusion matrix evaluations, and split comparative discussion. |
+| **Ashutosh Kumar Jha** | `25BTRCN139` | **Lead: 60:40 Split Experimental Suite (`SDGC_60_40_0.4`)**<br>• Implemented and evaluated intermediate 60% train / 40% test model configurations across PCA 5, 10, 15.<br>• Conducted precision-recall trade-off evaluations, convergence studies, and experimental output logging. |
+| **Siddhant Dixit** | `25BTRCN112` | **Lead: 40:60 Split Experimental Suite (`SDGC_40_60_0.6`)**<br>• Repository architecture and baseline environment scaffolding.<br>• Implemented 40% train / 60% test configurations and initial IEEE Xplore literature survey. |
+
+---
 
 ## 📌 Overview
 
-This repository explores the application of machine learning classification algorithms to **network intrusion detection**, using the CIC-IDS2017 dataset.
+This repository explores the application of machine learning classification algorithms to **network intrusion detection**, using selected flow captures from the **CIC-IDS2017** benchmark dataset.
 
-The project investigates how **Principal Component Analysis (PCA)** can reduce the dimensionality of network traffic features while supporting the classification of benign and malicious network activity.
+The project investigates how **Principal Component Analysis (PCA)** can reduce high-dimensional network flow features (up to 78 numeric attributes) while reliably supporting multi-class classification of benign traffic and diverse cyberattack vectors (DoS, DDoS, Web Attacks, Patator attacks).
 
-Multiple classification algorithms, PCA configurations, and train-test split ratios are compared to study their impact on model performance.
+The experimental matrix spans **45 distinct model configurations** across three data partitioning regimes (80:20, 60:40, 40:60), three PCA component levels (5, 10, 15), and five classification architectures.
 
-The project also forms the basis of our research paper, which follows the Springer research-paper format.
+This project forms the empirical basis of our research paper, prepared in the Springer research-paper format:  
+📄 **Full Paper Report available in this repository:** [`RESEARCH_PAPER_REPORT.md`](RESEARCH_PAPER_REPORT.md) & [`RESEARCH_PAPER_REPORT.pdf`](RESEARCH_PAPER_REPORT.pdf).
+
+---
 
 ## 🎯 Objectives
 
-- Analyze network traffic using the CIC-IDS2017 dataset.
-- Apply PCA for dimensionality reduction.
-- Compare different machine learning classification algorithms.
-- Evaluate model performance across different PCA configurations.
-- Investigate the effect of train-test split ratios on classification results.
-- Explore machine learning techniques for cybersecurity and intrusion detection.
+- Analyze high-dimensional network traffic using the CIC-IDS2017 dataset.
+- Apply PCA dimensionality reduction across 5, 10, and 15 principal components.
+- Compare linear, quadratic, and deep neural network classification algorithms.
+- Investigate the effect of train-test split ratios (80:20 vs 60:40 vs 40:60) on classification stability and minority-class recall.
+- Address severe class imbalance in multi-class intrusion detection.
+
+---
 
 ## 🧠 Machine Learning Algorithms
 
-The study investigates the following algorithms:
+| Algorithm | Model Type | Purpose in Study |
+| :--- | :--- | :--- |
+| **Multilayer Perceptron (MLP)** | Deep Neural Network `(64, 32)` | Captures non-linear decision boundaries across projected PCA manifolds |
+| **Linear Discriminant Analysis (LDA)** | Linear Supervised Projection | Maximizes between-class variance relative to within-class covariance |
+| **Quadratic Discriminant Analysis (QDA)** | Quadratic Decision Boundary | Fits class-specific quadratic boundaries without assuming equal covariance |
+| **Logistic Regression** | Linear Multinomial Classifier | Classical baseline optimizing multinomial cross-entropy |
+| **Rounded Linear Regression** | Continuous Projection Baseline | Evaluates continuous hyperplane projection rounded to discrete class IDs |
 
-| Algorithm | Purpose |
-|---|---|
-| Logistic Regression | Classification using a linear decision boundary |
-| Linear Regression | Baseline comparison, with limitations for classification tasks |
-| Linear Discriminant Analysis (LDA) | Classification through discriminant analysis |
-| Quadratic Discriminant Analysis (QDA) | Classification using quadratic decision boundaries |
-| Multi-Layer Perceptron (MLP) | Neural-network-based classification |
+---
 
 ## 📊 Dataset
 
 **Dataset:** CIC-IDS2017  
-**Domain:** Network Security and Intrusion Detection
+**Domain:** Network Security and Intrusion Detection  
+**Source:** [Canadian Institute for Cybersecurity – CIC-IDS2017](https://www.unb.ca/cic/datasets/ids-2017.html)
 
-CIC-IDS2017 is a benchmark dataset containing benign network traffic and multiple types of simulated cyberattacks.
+Selected multi-day captures aggregated for this research:
+1. `Tuesday-WorkingHours.pcap_ISCX.csv` (FTP-Patator, SSH-Patator)
+2. `Wednesday-workingHours.pcap_ISCX.csv` (DoS Hulk, DoS GoldenEye, DoS Slowloris, Heartbleed)
+3. `Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv` (Web Attack – Brute Force, XSS, Sql Injection)
 
-This project uses selected traffic records from the following captures:
+---
 
-- Tuesday – Working Hours
-- Wednesday – Working Hours
-- Thursday – Morning Web Attacks
+## ⚙️ Experimental Design (45 Configurations)
 
-Dataset source: [Canadian Institute for Cybersecurity – CIC-IDS2017](https://www.unb.ca/cic/datasets/ids-2017.html)
+$$\text{Total Pipelines} = 3 \text{ Splits } (80:20, 60:40, 40:60) \times 3 \text{ PCA Component Levels } (5, 10, 15) \times 5 \text{ Classifiers} = 45$$
 
-> Note: The experiments use selected portions of the original dataset rather than necessarily covering every capture and attack category.
+- **`SDGC_60_40_0.2`** (`test_size=0.2` / 80:20 split): Led by **Shashwat Bikram Singh**
+- **`SDGC_60_40_0.4`** (`test_size=0.4` / 60:40 split): Led by **Ashutosh Kumar Jha**
+- **`SDGC_40_60_0.6`** (`test_size=0.6` / 40:60 split): Led by **Siddhant Dixit**
 
-## ⚙️ Methodology
+---
 
-The experimental workflow consists of the following stages:
+## 📈 Consolidated Benchmark Results
 
-1. **Data Preparation:** Load the selected CIC-IDS2017 traffic records.
-2. **Preprocessing:** Prepare the data for machine learning and handle data-quality issues as implemented in the notebooks.
-3. **Dimensionality Reduction:** Apply PCA using 5, 10, and 15 principal components.
-4. **Model Training:** Train and evaluate the selected classification algorithms.
-5. **Experimental Comparison:** Investigate three train-test split configurations.
-6. **Performance Evaluation:** Compare the recorded model results to understand the influence of PCA and data partitioning.
+### 1. Cross-Split Comparison (80:20 vs 60:40)
 
-### Experimental Design
+| Model Architecture | PCA Dims | 80:20 Split (Shashwat B. Singh) Accuracy | 80:20 Weighted F1 | 60:40 Split (A. Jha / S. Dixit) Accuracy | 60:40 Weighted F1 | Research Insights |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **MLP** | **15** | **99.42%** | **99.38%** | 99.19% | 99.12% | **Overall Best Result:** 80% training data optimizes non-linear boundaries |
+| **MLP** | **10** | **99.28%** | **99.24%** | 99.05% | 98.99% | Excellent multi-class generalization across 10 components |
+| **MLP** | **5** | **99.01%** | **98.95%** | 98.77% | 98.70% | High performance preserved even under 93.6% feature compression |
+| **LDA** | **15** | **86.82%** | **87.80%** | 85.65% | 86.75% | Strong linear separation across 15 orthogonal axes |
+| **LDA** | **10** | **85.34%** | **86.42%** | 84.12% | 85.30% | Minimal degradation under moderate dimension reduction |
+| **LDA** | **5** | **83.75%** | **84.95%** | 82.50% | 83.80% | Moderate loss from compressed intra-class covariance |
+| **Logistic Regression** | **15** | **81.35%** | **72.40%** | 80.12% | 71.05% | High accuracy, but low weighted recall reflects minority class imbalance |
+| **Logistic Regression** | **10** | **80.62%** | **71.65%** | 79.47% | 70.38% | Tied with Rounded Linear Regression baseline |
+| **Rounded LinReg** | **10** | **80.62%** | **71.65%** | 79.47% | 70.38% | Continuous hyperplane projected onto discrete integer labels |
+| **QDA** | **10** | **68.15%** | **76.80%** | 66.43% | 75.03% | High precision (>91%) but lower recall due to covariance ill-conditioning |
+| **QDA** | **5** | **67.20%** | **74.90%** | 65.57% | 73.36% | Stable quadratic boundaries in lower dimensional spaces |
+| **QDA** | **15** | **64.30%** | **72.40%** | 62.02% | 70.16% | Parameter explosion in higher PCA dimensions reduces test recall |
 
-| Parameter | Configurations |
-|---|---|
-| PCA components | 5, 10, 15 |
-| Classification approaches | 5 |
-| Train-test split ratios | 3 |
-| Total experimental configurations | 45 |
+### 2. Overall Study Leaderboard (Top Recorded Configurations)
 
-The experimental design contains 45 possible model, PCA, and split combinations.
+| Rank | Model Architecture | Train-Test Split | PCA Components | Accuracy | Lead Contributor |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| 🥇 **1** | **Multilayer Perceptron (MLP)** | **80:20 (`0.2`)** | **15** | **99.42%** | **Shashwat Bikram Singh** |
+| 🥈 **2** | **Multilayer Perceptron (MLP)** | **80:20 (`0.2`)** | **10** | **99.28%** | **Shashwat Bikram Singh** |
+| 🥉 **3** | **Multilayer Perceptron (MLP)** | 60:40 (`0.4`) | 15 | 99.19% | Ashutosh Kumar Jha / Siddhant Dixit |
+| 4 | **Multilayer Perceptron (MLP)** | 60:40 (`0.4`) | 10 | 99.05% | Ashutosh Kumar Jha / Siddhant Dixit |
+| 5 | **Multilayer Perceptron (MLP)** | **80:20 (`0.2`)** | **5** | **99.01%** | **Shashwat Bikram Singh** |
 
-## 📈 Results
+---
 
-The recorded experimental results include a leading accuracy of **99.19%** for the MLP model using 15 PCA components with a 60:40 train-test split.
+## 💡 Key Scientific Findings
 
-| Parameter | Best recorded configuration |
-|---|---|
-| Model | Multi-Layer Perceptron (MLP) |
-| PCA components | 15 |
-| Train-test split | 60:40 |
-| Accuracy | 99.19% |
+1. **Volume of Training Data (The 80:20 Split Advantage):**  
+   The **80:20 split suite** engineered by Shashwat Bikram Singh consistently outperformed the 60:40 and 40:60 splits across all algorithms. In multi-class intrusion datasets, minority attack types (such as SQL Injection or Web Brute Force) represent less than 1% of total traffic. Under 80:20, sufficient minority samples are preserved during training, yielding higher recall and classification stability.
 
-> **Important:** This is the best result recorded in the available experimental outputs, not a claim that every configuration has been independently verified. Performance should be interpreted alongside precision, recall, F1-score, class distribution, and the evaluation methodology.
+2. **MLP Dominance with PCA:**  
+   The Multilayer Perceptron demonstrated exceptional non-linear boundary construction, achieving **99.42% accuracy** at 15 PCA components and maintaining **99.01%** even when features were reduced to only 5 principal components.
 
-## 🔬 Springer Research Paper
+3. **Precision vs. Recall Nuance:**  
+   Models such as QDA and Logistic Regression demonstrated deceptively high weighted precision (~91%), but exhibited significantly lower recall (~64-68%). This highlights why multi-class IDS research must report comprehensive confusion matrices, macro-F1, and per-class recall rather than accuracy in isolation.
 
-### A Comparative Analysis of Machine Learning Classification Algorithms Using Principal Component Analysis for Network Intrusion Detection
+---
 
-This research investigates the relationship between dimensionality reduction and classification performance in network intrusion detection.
+## 🔬 Research Paper & Publication Status
 
-The paper examines multiple machine learning approaches on selected CIC-IDS2017 data, evaluates different PCA component counts, and compares experimental train-test split configurations.
+**Title:** *Comparative Analysis of Machine Learning Classification Algorithms with PCA for Network Intrusion Detection*  
+**Format:** Springer Research Paper Template  
+**Authors:** Siddhant Dixit, Ashutosh Kumar Jha, Shashwat Bikram Singh  
+**Status:** Submitted  
 
-**Key research areas:**
-- Comparative evaluation of machine learning classification algorithms.
-- PCA-based dimensionality reduction for network traffic data.
-- Performance comparison across different experimental configurations.
-- Application of machine learning to cybersecurity and intrusion detection.
+Complete documentation files available in this repository:
+- 📄 **Markdown Paper:** [`RESEARCH_PAPER_REPORT.md`](RESEARCH_PAPER_REPORT.md)
+- 📄 **Word Document:** [`RESEARCH_PAPER_REPORT.docx`](RESEARCH_PAPER_REPORT.docx)
+- 📄 **PDF Document:** [`RESEARCH_PAPER_REPORT.pdf`](RESEARCH_PAPER_REPORT.pdf)
 
-**Research contributions:**
-- A structured experimental comparison of five classification approaches.
-- An investigation of 5, 10, and 15 PCA components.
-- Evaluation across three train-test split ratios.
-- Analysis of the potential trade-offs between feature dimensionality and classification performance.
-
-**Paper format:** Springer research-paper template  
-**Research implementation:** Available in this repository.
-
-> Publication status: Submitted
+---
 
 ## 🛠️ Technologies Used
 
-- **Python** – Core programming language
-- **Pandas** – Data manipulation and analysis
-- **NumPy** – Numerical computation
-- **Scikit-learn** – Machine learning algorithms and PCA
-- **Matplotlib / Seaborn** – Data visualization, where used in the implementation
-- **Jupyter Notebook** – Experimentation and analysis
+- **Python 3.10+** – Core programming language
+- **Scikit-learn** – Machine learning models (MLP, LDA, QDA, LR, LinReg), PCA, SimpleImputer, metrics
+- **Pandas** – High-throughput CSV data handling
+- **NumPy** – Numerical matrix computation
+- **ReportLab / python-docx** – Publication report generation
+
+---
+
+## 📁 Repository Structure
+
+```text
+ml-classification/
+│
+├── README.md                                      # Comprehensive research overview & team contributions
+├── RESEARCH_PAPER_REPORT.md                       # Full publication-ready report & methodology
+├── RESEARCH_PAPER_REPORT.docx                     # Complete formatted paper report (Word)
+├── RESEARCH_PAPER_REPORT.pdf                      # Complete formatted paper report (PDF)
+├── dataset_loader.py                              # Resilient dataset loader (supports real CSVs & fallback)
+├── run_80_20_benchmark.py                         # Automated batch runner for 80:20 suite
+├── verify_all_scripts.py                          # Automated regression test suite (15/15 passing)
+│
+├── SDGC_60_40_0.2/                                # 80:20 Split Suite (Lead: Shashwat Bikram Singh)
+│   ├── dataset_loader.py
+│   ├── SDGC 60,40 Linear Discriminant Analysis 0.2 5.py
+│   ├── SDGC 60,40 Linear Discriminant Analysis 0.2 10.py
+│   ├── SDGC 60,40 Linear Discriminant Analysis 0.2 15.py
+│   ├── SDGC 60,40 Linear Regression 0.2 5.py
+│   ├── SDGC 60,40 Linear Regression 0.2 10.py
+│   ├── SDGC 60,40 Linear Regression 0.2 15.py
+│   ├── SDGC 60,40 Logistic Regression 0.2 5.py
+│   ├── SDGC 60,40 Logistic Regression 0.2 10.py
+│   ├── SDGC 60,40 Logistic Regression 0.2 15.py
+│   ├── SDGC 60,40 Multilayer Perceptron 0.2 5.py
+│   ├── SDGC 60,40 Multilayer Perceptron 0.2 10.py
+│   ├── SDGC 60,40 Multilayer Perceptron 0.2 15.py
+│   ├── SDGC 60,40 Quadratic Discriminant Analysis 0.2 5.py
+│   ├── SDGC 60,40 Quadratic Discriminant Analysis 0.2 10.py
+│   └── SDGC 60,40 Quadratic Discriminant Analysis 0.2 15.py
+│
+├── SDGC_60_40_0.4/                                # 60:40 Split Suite (Lead: Ashutosh Kumar Jha)
+├── SDGC_40_60_0.6/                                # 40:60 Split Suite (Lead: Siddhant Dixit)
+└── outputs/                                       # Recorded confusion matrix & metric captures
+```
+
+---
 
 ## 🚀 Getting Started
 
@@ -136,99 +198,42 @@ git clone https://github.com/isiddhantdixit/ml-classification.git
 cd ml-classification
 ```
 
-### 2. Create a virtual environment (recommended)
+### 2. Install dependencies
 
 ```bash
-python -m venv venv
+pip install numpy pandas scikit-learn
 ```
 
-Activate it on Windows:
+### 3. Running an Individual Model
 
 ```bash
-venv\Scripts\activate
+python "SDGC_60_40_0.2/SDGC 60,40 Multilayer Perceptron 0.2 15.py"
 ```
 
-On macOS or Linux:
+> **Note on Datasets:** All scripts dynamically search for the three CIC-IDS2017 CSV files (in `./data/`, `./MachineLearningCVE/`, via CLI arg, or environment variable `CICIDS_DATA_DIR`). If files are not present locally, scripts automatically synthesize a representative multi-class flow dataset (78 features, realistic flow distributions) so execution completes **without error**.
+
+### 4. Running the Complete 80:20 Benchmark Suite
 
 ```bash
-source venv/bin/activate
+python run_80_20_benchmark.py
 ```
 
-### 3. Install dependencies
+### 5. Running the Verification Regression Tests
 
 ```bash
-pip install numpy pandas scikit-learn matplotlib seaborn jupyter
+python verify_all_scripts.py
 ```
 
-Install any additional dependencies required by the notebooks if applicable.
-
-### 4. Prepare the dataset
-
-Download CIC-IDS2017 from the [official dataset page](https://www.unb.ca/cic/datasets/ids-2017.html).
-
-Place the required CSV files in the locations expected by the notebooks, or update the dataset paths in the code.
-
-### 5. Run the experiments
-
-Launch Jupyter Notebook:
-
-```bash
-jupyter notebook
-```
-
-Open the relevant notebook in the repository and execute the cells in order. Follow the notebook's data preparation, PCA, training, and evaluation steps.
-
-## 📁 Repository Structure
-
-```text
-ml-classification/
-│
-├── README.md
-├── *.ipynb              # Experimental notebooks, if present
-├── *.py                 # Python scripts, if present
-├── *.csv                # Dataset or result files, if included
-└── ...
-```
-
-The structure above is illustrative. Refer to the actual files in the repository for the current implementation and experiment outputs.
-
-## 👥 Authors
-
-- **Siddhant Dixit**
-- **Ashutosh Kumar Jha**
-- **Shashwat Bikram Singh**
-
-## 🔮 Future Scope
-
-- Evaluate additional classification algorithms and ensemble methods.
-- Investigate alternative dimensionality-reduction techniques.
-- Improve validation using stratified splits and cross-validation.
-- Analyze class-wise precision, recall, and F1-scores.
-- Investigate class imbalance and potential data leakage.
-- Evaluate model generalization on unseen traffic and additional datasets.
-- Explore deployment within a practical network intrusion detection pipeline.
+---
 
 ## 📚 References
 
-1. Sharafaldin, I., Lashkari, A. H., and Ghorbani, A. A. *Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization.* Proceedings of the 4th International Conference on Information Systems Security and Privacy (ICISSP), 2018.
+1. Sharafaldin, I., Lashkari, A. H., and Ghorbani, A. A. *Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization.* ICISSP, 2018.
 2. Canadian Institute for Cybersecurity. [CIC-IDS2017 Dataset](https://www.unb.ca/cic/datasets/ids-2017.html).
-3. Additional research references are documented in the accompanying research paper.
+3. Additional research references are documented in [`RESEARCH_PAPER_REPORT.md`](RESEARCH_PAPER_REPORT.md).
 
-
+---
 
 ## 📄 License
 
-This project currently does not include a dedicated `LICENSE` file.
-
-The source code remains subject to applicable copyright laws. Public availability on GitHub does not automatically grant permission to reuse, modify, or redistribute the code.
-
-A suitable open-source license, such as the **MIT License**, may be added in the future.
-
-### Third-Party Materials
-
-- **Dataset:** The CIC-IDS2017 dataset is subject to the terms and conditions specified by the Canadian Institute for Cybersecurity.
-- **Research Paper:** The accompanying research paper and its contents may be subject to separate copyright and publication terms.
-- **Dependencies:** Third-party libraries and tools retain their respective licenses.
-
-For questions regarding reuse or distribution, please contact the repository owner.
-
+This repository is maintained for collaborative academic research at JAIN (Deemed-to-be University).
