@@ -12,12 +12,6 @@
 
 ---
 
-## 👥 Authors & Team Research Contributions
-
-**Department of Computer Science and Engineering**  
-**JAIN (Deemed-to-be University), Bengaluru, India**
-
-
 
 ## 📌 Overview
 
