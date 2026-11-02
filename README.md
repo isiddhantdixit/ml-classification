@@ -17,13 +17,7 @@
 **Department of Computer Science and Engineering**  
 **JAIN (Deemed-to-be University), Bengaluru, India**
 
-| Author | Roll Number | Primary Research Contribution & Experimental Allocation |
-| :--- | :--- | :--- |
-| **Shashwat Bikram Singh** | `25BTRCN173` | **Lead: 80:20 Split Experimental Suite (`SDGC_60_40_0.2`)**<br>• Implemented and evaluated all 15 model configurations for the 80% train / 20% test partition.<br>• Designed data preprocessing, NaN/Inf imputation, and LabelEncoder pipelines.<br>• Achieved the study's **overall highest accuracy of 99.42%** with 15-component MLP.<br>• Authored 80:20 performance analysis, multiclass confusion matrix evaluations, and split comparative discussion. |
-| **Ashutosh Kumar Jha** | `25BTRCN139` | **Lead: 60:40 Split Experimental Suite (`SDGC_60_40_0.4`)**<br>• Implemented and evaluated intermediate 60% train / 40% test model configurations across PCA 5, 10, 15.<br>• Conducted precision-recall trade-off evaluations, convergence studies, and experimental output logging. |
-| **Siddhant Dixit** | `25BTRCN112` | **Lead: 40:60 Split Experimental Suite (`SDGC_40_60_0.6`)**<br>• Repository architecture and baseline environment scaffolding.<br>• Implemented 40% train / 60% test configurations and initial IEEE Xplore literature survey. |
 
----
 
 ## 📌 Overview
 
